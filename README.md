@@ -73,6 +73,61 @@ Enter task description: Study Rust
 Enter priority (High/Medium/Low): High
 ✅ Task added successfully with ID 1!
 ```
+## 🧠 Task 3 - Banking System Using Traits
+
+### ✅ Objective:
+
+Implement a simple banking system using Rust’s `trait` and `struct` to simulate basic operations like deposits, withdrawals, and viewing account info.
+
+---
+
+### 🛡️ Features:
+
+- Define a trait `Account` with the following methods:
+  - `deposit(amount: f64) -> Result<String, String>`
+  - `withdraw(amount: f64) -> Result<String, String>`
+  - `balance() -> f64`
+  - `account_info() -> String`
+
+- Create a struct `BankAccount` with:
+  - `account_number: String`
+  - `holder_name: String`
+  - `account_balance: f64`
+
+- Implement the `Account` trait for `BankAccount`.
+
+---
+
+### 📦 Sample Output:
+
+```text
+🏦 Welcome to Rust Bank!
+=========================
+Account #001: Youssef | Balance: $1000.00
+Account #002: Rakan | Balance: $1000.00
+✅ Deposit of $500.00 successful.
+✅ Withdrawal of $200.00 successful.
+💰 Final Balance: $1500.00
+💰 Final Balance: $800.00
+```
+
+---
+
+### ❌ Error Test Cases:
+
+#### ❌ Deposit Negative Amount:
+```text
+❌ Error: ❌ Transaction failed: amount must be greater than 0
+```
+
+#### ❌ Withdraw Negative Amount:
+```text
+❌ Error: ❌ Transaction failed: amount must be greater than 0
+```
+
+#### ❌ Withdraw More Than Balance:
+```text
+❌ Error: ❌ Transaction failed: insufficient funds. Available balance: $800.00
 
 ---
 

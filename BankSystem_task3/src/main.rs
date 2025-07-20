@@ -92,7 +92,7 @@ fn main() {
 
     // ✅ Transfer test
     println!("\n🔁 Testing money transfer...");
-    match transaction(&mut user0, &mut user1, 300.0) {
+    match transfer(&mut user0, &mut user1, 300.0) {
         Ok(msg) => println!("{}", msg),
         Err(err) => println!("{}", err),
     }
@@ -134,7 +134,7 @@ fn main() {
 }
 
 
-fn transaction(sender: &mut BankAccount, reciever: &mut BankAccount, amount: f64) -> Result<String, String>{
+fn transfer(sender: &mut BankAccount, reciever: &mut BankAccount, amount: f64) -> Result<String, String>{
     format!(
         "Transferring ${:.2} from Account #{} to Account #{}...",
         amount, sender.account_number, reciever.account_number

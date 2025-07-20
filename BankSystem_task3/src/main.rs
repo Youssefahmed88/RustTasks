@@ -90,36 +90,41 @@ fn main() {
     println!("💰 Final Balance: ${:.2}", user0.balance());
     println!("💰 Final Balance: ${:.2}", user1.balance());
 
+    // ✅ Transfer test
+    println!("\n🔁 Testing money transfer...");
+    match transaction(&mut user0, &mut user1, 300.0) {
+        Ok(msg) => println!("{}", msg),
+        Err(err) => println!("{}", err),
+    }
+
+    println!("📊 After Transfer:");
+    println!("{}", user0.account_info());
+    println!("{}", user1.account_info());
+
     // ✅ Error test cases
     println!("\n🧪 Running error test cases...");
-
     let mut test_user = BankAccount::new("003".to_string(), "Tester".to_string(), 100.0);
 
-    // ❌ Test 1: Deposit zero amount
     match test_user.deposit(0.0) {
         Ok(msg) => println!("❌ Unexpected success: {}", msg),
         Err(err) => println!("✅ Correctly caught deposit error: {}", err),
     }
 
-    // ❌ Test 2: Deposit negative amount
     match test_user.deposit(-50.0) {
         Ok(msg) => println!("❌ Unexpected success: {}", msg),
         Err(err) => println!("✅ Correctly caught deposit error: {}", err),
     }
 
-    // ❌ Test 3: Withdraw zero amount
     match test_user.withdraw(0.0) {
         Ok(msg) => println!("❌ Unexpected success: {}", msg),
         Err(err) => println!("✅ Correctly caught withdrawal error: {}", err),
     }
 
-    // ❌ Test 4: Withdraw negative amount
     match test_user.withdraw(-20.0) {
         Ok(msg) => println!("❌ Unexpected success: {}", msg),
         Err(err) => println!("✅ Correctly caught withdrawal error: {}", err),
     }
 
-    // ❌ Test 5: Withdraw more than available balance
     match test_user.withdraw(1000.0) {
         Ok(msg) => println!("❌ Unexpected success: {}", msg),
         Err(err) => println!("✅ Correctly caught insufficient funds: {}", err),
@@ -128,3 +133,23 @@ fn main() {
     println!("✅ Final balance remains: ${:.2}", test_user.balance());
 }
 
+
+fn transaction(sender: &mut BankAccount, reciever: &mut BankAccount, amount: f64) -> Result<String, String>{
+    format!(
+        "Transferring ${:.2} from Account #{} to Account #{}...",
+        amount, sender.account_number, reciever.account_number
+    );
+
+    match sender.withdraw(amount){
+        Ok(_) => {
+            match reciever.deposit(amount) {
+                Ok(_) => Ok("✅ Transfer successful!".to_string()),
+                Err(e) => {
+                    // Rollback the withdrawal if deposit fails
+                    sender.deposit(amount).unwrap();
+                    Err(format!("❌ Transfer failed during deposit: {}", e))
+                }
+            }
+        }
+        Err(e) => Err(format!("❌ Transfer failed during withdrawal: {}", e)),    }
+}
